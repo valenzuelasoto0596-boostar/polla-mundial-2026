@@ -160,6 +160,38 @@ a { color: inherit; text-decoration: none; }
 .p-total small { display: block; font-weight: 500; font-size: 10px; color: var(--muted); letter-spacing: 0.06em; text-transform: uppercase; }
 .chev { color: var(--muted); }
 
+/* Búsqueda */
+.search-wrap { position: relative; margin-bottom: 14px; }
+.search-ico { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); font-size: 14px; opacity: 0.7; }
+.search { padding-left: 38px; height: 44px; border-radius: 12px; background: var(--card); }
+.search-clear {
+  position: absolute; right: 8px; top: 50%; transform: translateY(-50%);
+  width: 28px; height: 28px; border-radius: 8px; border: none; cursor: pointer;
+  background: var(--card-2); color: var(--muted); font-size: 18px; line-height: 1;
+}
+.search-clear:hover { color: var(--text); }
+
+/* Celda de ranking con flecha de movimiento */
+.rank-cell { display: flex; flex-direction: column; align-items: center; gap: 3px; }
+.mv { font-size: 10px; font-weight: 700; line-height: 1; }
+.mv-up { color: var(--green); }
+.mv-down { color: #fb7185; }
+.mv-same { color: var(--muted); }
+.mv-new { color: var(--accent-2); }
+
+.champ-pick { display: inline-flex; align-items: center; gap: 2px; }
+.p-meta.dim { color: var(--muted); opacity: 0.85; font-size: 11px; }
+
+/* Pronóstico podio (detalle) */
+.podium-pred { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 12px; }
+.pp {
+  background: var(--card); border: 1px solid var(--border); border-radius: 12px;
+  padding: 12px; display: flex; flex-direction: column; gap: 5px;
+}
+.pp-l { font-size: 11px; color: var(--muted); }
+.pp-t { font-weight: 700; font-size: 14px; display: flex; align-items: center; }
+@media (max-width: 620px) { .podium-pred { grid-template-columns: 1fr; } }
+
 /* Detail page */
 .back-link { display: inline-flex; gap: 6px; align-items: center; color: var(--muted); font-size: 13px; margin: 22px 0 12px; }
 .back-link:hover { color: var(--text); }

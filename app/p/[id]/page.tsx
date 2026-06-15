@@ -62,6 +62,13 @@ export default async function ParticipantPage({
         <div className="stat"><div className="n">{b.subtotals.honor}</div><div className="l">Cuadro de honor</div></div>
       </div>
 
+      {/* Pronóstico podio */}
+      <div className="podium-pred">
+        <div className="pp"><span className="pp-l">🥇 Campeón</span><span className="pp-t"><span className="flag">{flag(p.honor.champion)}</span>{p.honor.champion ?? "—"}</span></div>
+        <div className="pp"><span className="pp-l">🥈 Subcampeón</span><span className="pp-t"><span className="flag">{flag(p.honor.runnerUp)}</span>{p.honor.runnerUp ?? "—"}</span></div>
+        <div className="pp"><span className="pp-l">🥉 Tercero</span><span className="pp-t"><span className="flag">{flag(p.honor.third)}</span>{p.honor.third ?? "—"}</span></div>
+      </div>
+
       {/* Fase de grupos */}
       <div className="section">
         <h3>Fase de grupos <span className="tag">tu marcador vs. real · pts</span></h3>

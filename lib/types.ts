@@ -85,6 +85,8 @@ export type Results = {
     ballonBronze: string | null;
   };
   updatedAt: string | null;
+  // Orden (ids) de la tabla ANTES de la última actualización (para "subió/bajó")
+  prevOrder?: string[];
 };
 
 export function emptyResults(): Results {

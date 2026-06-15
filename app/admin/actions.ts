@@ -3,8 +3,9 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { emptyResults, type Results, type ActualKoMatch } from "@/lib/types";
-import { fixtures, GROUP_LETTERS } from "@/lib/data";
+import { fixtures, GROUP_LETTERS, participants } from "@/lib/data";
 import { getResults, saveResults } from "@/lib/store";
+import { computeStandings } from "@/lib/scoring";
 
 const KO_SLOTS: Record<string, number> = {
   r32: 16, r16: 8, qf: 4, sf: 2, third: 1, final: 1,
@@ -67,6 +68,9 @@ export async function saveResultsAction(formData: FormData) {
     ballonSilver: str(formData.get("h_ballonSilver")),
     ballonBronze: str(formData.get("h_ballonBronze")),
   };
+
+  // Guardar el orden ANTES de esta actualización para mostrar subió/bajó.
+  data.prevOrder = computeStandings(participants, prev).map((s) => s.id);
 
   try {
     await saveResults(data);

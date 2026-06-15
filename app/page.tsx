@@ -1,15 +1,13 @@
 import Link from "next/link";
-import { participants } from "@/lib/data";
+import { participants, getParticipant } from "@/lib/data";
 import { getResults } from "@/lib/store";
 import { computeStandings } from "@/lib/scoring";
+import { flag } from "@/lib/flags";
+import Leaderboard, { type Row } from "./Leaderboard";
 
 export const metadata = { title: "Tabla de posiciones · Polla Mundial 2026" };
 
 export const dynamic = "force-dynamic";
-
-function rankClass(i: number) {
-  return i === 0 ? "gold" : i === 1 ? "silver" : i === 2 ? "bronze" : "";
-}
 
 function formatUpdated(iso: string | null): string | null {
   if (!iso) return null;
@@ -26,10 +24,31 @@ export default async function HomePage() {
   const results = await getResults();
   const standings = computeStandings(participants, results);
   const hasResults =
-    Object.keys(results.groups).length > 0 ||
-    results.r32teams.length > 0 ||
-    results.ko.r32.length > 0;
+    Object.keys(results.groups).length > 0 || results.ko.r32.length > 0;
   const updated = formatUpdated(results.updatedAt);
+
+  const prevOrder = results.prevOrder ?? null;
+  const rows: Row[] = standings.map((s, i) => {
+    const p = getParticipant(s.id);
+    const champion = p?.honor.champion ?? null;
+    let move: number | null = null;
+    if (prevOrder) {
+      const prevIdx = prevOrder.indexOf(s.id);
+      move = prevIdx === -1 ? null : prevIdx - i; // >0 subió posiciones
+    }
+    return {
+      id: s.id,
+      name: s.name,
+      total: s.total,
+      group: s.group,
+      koMatch: s.koMatch,
+      advancement: s.advancement,
+      honor: s.honor,
+      champion,
+      championFlag: flag(champion),
+      move,
+    };
+  });
 
   return (
     <>
@@ -50,28 +69,7 @@ export default async function HomePage() {
         <Link href="/admin" className="pill">✏️ Cargar / corregir resultados</Link>
       </div>
 
-      <div className="board">
-        <div className="board-row board-head">
-          <div>#</div>
-          <div>Participante</div>
-          <div style={{ textAlign: "right" }}>Puntos</div>
-        </div>
-        {standings.map((s, i) => (
-          <Link key={s.id} href={`/p/${s.id}`} className="board-row">
-            <div className={`rank ${rankClass(i)}`}>{i + 1}</div>
-            <div style={{ minWidth: 0 }}>
-              <div className="p-name">{s.name}</div>
-              <div className="p-meta">
-                Grupos {s.group} · Llaves {s.koMatch} · Avance {s.advancement} · Honor {s.honor}
-              </div>
-            </div>
-            <div className="p-total">
-              {s.total}
-              <small>pts</small>
-            </div>
-          </Link>
-        ))}
-      </div>
+      <Leaderboard rows={rows} />
     </>
   );
 }
