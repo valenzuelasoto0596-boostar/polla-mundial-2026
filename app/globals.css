@@ -182,6 +182,30 @@ a { color: inherit; text-decoration: none; }
 .champ-pick { display: inline-flex; align-items: center; gap: 2px; }
 .p-meta.dim { color: var(--muted); opacity: 0.85; font-size: 11px; }
 
+/* Gráfica de historial */
+.chart-card {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 10px; box-shadow: var(--shadow);
+}
+.chart-svg { width: 100%; height: auto; display: block; }
+.chart-svg .ax { fill: var(--muted); font-size: 11px; }
+.chart-tools { display: flex; gap: 8px; margin: 12px 0; }
+.chart-tools .pill { cursor: pointer; border: 1px solid var(--border); }
+.chart-legend {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 6px; margin-top: 6px;
+}
+.leg {
+  display: flex; align-items: center; gap: 8px; width: 100%;
+  background: var(--card); border: 1px solid var(--border); border-radius: 9px;
+  padding: 7px 10px; cursor: pointer; color: var(--muted); font-size: 13px; text-align: left;
+}
+.leg.on { color: var(--text); border-color: var(--card-2); background: var(--card-2); }
+.leg-sw { width: 12px; height: 12px; border-radius: 4px; flex: 0 0 auto; }
+.leg-pos { width: 18px; color: var(--muted); font-variant-numeric: tabular-nums; font-size: 11px; }
+.leg-name { flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.leg-pts { font-weight: 700; font-variant-numeric: tabular-nums; }
+
 /* Pronóstico podio (detalle) */
 .podium-pred { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 12px; }
 .pp {

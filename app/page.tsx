@@ -65,6 +65,7 @@ export default async function HomePage() {
       )}
 
       <div className="tabs">
+        <Link href="/historial" className="pill">📈 Historial por fecha</Link>
         <Link href="/partidos" className="pill">📋 Ver partidos y grupos</Link>
         <Link href="/admin" className="pill">✏️ Cargar / corregir resultados</Link>
       </div>

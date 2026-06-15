@@ -21,6 +21,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <div className="header-spacer" />
             <nav className="nav">
               <Link href="/" className="header-link">Tabla</Link>
+              <Link href="/historial" className="header-link">Historial</Link>
               <Link href="/partidos" className="header-link">Partidos</Link>
               <Link href="/admin" className="header-link primary">+ Resultados</Link>
             </nav>
