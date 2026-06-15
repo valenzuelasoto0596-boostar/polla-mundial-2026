@@ -1,42 +1,10 @@
 "use server";
 
-import { cookies } from "next/headers";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { emptyResults, type Results, type ActualKoMatch } from "@/lib/types";
 import { fixtures, GROUP_LETTERS } from "@/lib/data";
 import { getResults, saveResults } from "@/lib/store";
-
-const COOKIE = "polla_admin";
-
-export async function isAuthed(): Promise<boolean> {
-  const pwd = process.env.ADMIN_PASSWORD;
-  if (!pwd) return true; // sin contraseña configurada => abierto (mostramos aviso)
-  const c = await cookies();
-  return c.get(COOKIE)?.value === "granted";
-}
-
-export async function login(formData: FormData) {
-  const pwd = process.env.ADMIN_PASSWORD;
-  const attempt = String(formData.get("password") ?? "");
-  if (!pwd || attempt === pwd) {
-    const c = await cookies();
-    c.set(COOKIE, "granted", {
-      httpOnly: true,
-      sameSite: "lax",
-      maxAge: 60 * 60 * 24 * 30,
-      path: "/",
-    });
-    redirect("/admin");
-  }
-  redirect("/admin?error=1");
-}
-
-export async function logout() {
-  const c = await cookies();
-  c.delete(COOKIE);
-  redirect("/admin");
-}
 
 const KO_SLOTS: Record<string, number> = {
   r32: 16, r16: 8, qf: 4, sf: 2, third: 1, final: 1,
@@ -57,8 +25,6 @@ function str(v: FormDataEntryValue | null): string | null {
 }
 
 export async function saveResultsAction(formData: FormData) {
-  if (!(await isAuthed())) redirect("/admin");
-
   const prev = await getResults();
   const data: Results = emptyResults();
 

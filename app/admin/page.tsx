@@ -1,6 +1,6 @@
 import { fixtures, GROUP_LETTERS, ALL_TEAMS, PHASE_LABELS } from "@/lib/data";
 import { getResults, isStoreConfigured } from "@/lib/store";
-import { isAuthed, login, logout, saveResultsAction } from "./actions";
+import { saveResultsAction } from "./actions";
 import type { KoPhase } from "@/lib/types";
 
 export const dynamic = "force-dynamic";
@@ -31,34 +31,14 @@ export default async function AdminPage({
   searchParams: Promise<{ error?: string; saved?: string }>;
 }) {
   const sp = await searchParams;
-  const authed = await isAuthed();
-  const pwdConfigured = !!process.env.ADMIN_PASSWORD;
-
-  if (!authed) {
-    return (
-      <>
-        <h2 className="page-title">Ingresar resultados</h2>
-        <p className="page-sub">Acceso restringido al administrador de la polla.</p>
-        {sp.error && <div className="alert err">Contraseña incorrecta.</div>}
-        <div className="card" style={{ padding: 18, maxWidth: 360 }}>
-          <form action={login} className="admin-form">
-            <label htmlFor="password">Contraseña</label>
-            <input id="password" name="password" type="password" autoFocus />
-            <div style={{ height: 12 }} />
-            <button className="btn full" type="submit">Entrar</button>
-          </form>
-        </div>
-      </>
-    );
-  }
-
   const results = await getResults();
 
   return (
     <>
       <h2 className="page-title">Ingresar resultados</h2>
       <p className="page-sub">
-        Carga los marcadores reales. La tabla de posiciones se recalcula al guardar.
+        Página abierta para todos: cualquiera puede cargar o corregir los marcadores. La tabla
+        se recalcula al guardar.
       </p>
 
       {sp.saved && <div className="alert ok">Resultados guardados. La tabla ya está actualizada.</div>}
@@ -72,12 +52,6 @@ export default async function AdminPage({
         <div className="banner">
           ⚠️ Aún no hay almacenamiento configurado. Conecta un <strong>Vercel Blob Store</strong> al
           proyecto para poder guardar resultados de forma permanente.
-        </div>
-      )}
-      {!pwdConfigured && (
-        <div className="banner">
-          🔓 Esta página está abierta. Define la variable <strong>ADMIN_PASSWORD</strong> en Vercel
-          para protegerla con contraseña.
         </div>
       )}
 
@@ -164,10 +138,6 @@ export default async function AdminPage({
         <div style={{ display: "flex", gap: 10, marginTop: 22, position: "sticky", bottom: 16 }}>
           <button className="btn" type="submit">💾 Guardar resultados</button>
         </div>
-      </form>
-
-      <form action={logout} style={{ marginTop: 18 }}>
-        <button className="btn btn-secondary" type="submit">Cerrar sesión</button>
       </form>
     </>
   );
