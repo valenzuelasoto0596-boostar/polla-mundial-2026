@@ -3,6 +3,8 @@ import { participants } from "@/lib/data";
 import { getResults } from "@/lib/store";
 import { computeStandings } from "@/lib/scoring";
 
+export const metadata = { title: "Tabla de posiciones · Polla Mundial 2026" };
+
 export const dynamic = "force-dynamic";
 
 function rankClass(i: number) {
@@ -42,6 +44,11 @@ export default async function HomePage() {
           ve a <strong>Resultados</strong> para cargarlos y la tabla se actualizará.
         </div>
       )}
+
+      <div className="tabs">
+        <Link href="/partidos" className="pill">📋 Ver partidos y grupos</Link>
+        <Link href="/admin" className="pill">✏️ Cargar / corregir resultados</Link>
+      </div>
 
       <div className="board">
         <div className="board-row board-head">

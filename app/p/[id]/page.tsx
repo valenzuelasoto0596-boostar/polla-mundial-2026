@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { getParticipant, participants, GROUP_LETTERS, PHASE_LABELS } from "@/lib/data";
 import { getResults } from "@/lib/store";
 import { computeBreakdown, computeStandings } from "@/lib/scoring";
+import { flag } from "@/lib/flags";
 import type { KoPhase } from "@/lib/types";
 
 export const dynamic = "force-dynamic";
@@ -77,8 +78,8 @@ export default async function ParticipantPage({
               {b.groups[L].map((m) => (
                 <div className="match" key={m.id}>
                   <div className="teams">
-                    <span className="t">{m.home}</span>
-                    <span className="t" style={{ color: "var(--muted)" }}>{m.away}</span>
+                    <span className="t"><span className="flag">{flag(m.home)}</span>{m.home}</span>
+                    <span className="t" style={{ color: "var(--muted)" }}><span className="flag">{flag(m.away)}</span>{m.away}</span>
                   </div>
                   <Sc v={m.pred} />
                   <div className={m.actual ? "score actual" : "score muted"}>
@@ -102,8 +103,8 @@ export default async function ParticipantPage({
               {g.rows.map((m, i) => (
                 <div className="match" key={i}>
                   <div className="teams">
-                    <span className="t">{m.predHome ?? "—"}</span>
-                    <span className="t" style={{ color: "var(--muted)" }}>{m.predAway ?? "—"}</span>
+                    <span className="t"><span className="flag">{flag(m.predHome)}</span>{m.predHome ?? "—"}</span>
+                    <span className="t" style={{ color: "var(--muted)" }}><span className="flag">{flag(m.predAway)}</span>{m.predAway ?? "—"}</span>
                   </div>
                   <Sc v={m.pred} />
                   <div className={m.actual ? "score actual" : "score muted"}>
@@ -129,7 +130,9 @@ export default async function ParticipantPage({
               <div className="chips">
                 {a.predicted.length === 0 && <span className="note">Sin predicción</span>}
                 {a.predicted.map((t) => (
-                  <span key={t} className={`chip ${a.hits.includes(t) ? "hit" : ""}`}>{t}</span>
+                  <span key={t} className={`chip ${a.hits.includes(t) ? "hit" : ""}`}>
+                    <span className="flag">{flag(t)}</span>{t}
+                  </span>
                 ))}
               </div>
             </div>

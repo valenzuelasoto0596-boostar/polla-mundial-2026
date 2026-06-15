@@ -73,6 +73,34 @@ a { color: inherit; text-decoration: none; }
   padding: 7px 12px; border-radius: 9px; border: 1px solid var(--border);
 }
 .header-link:hover { color: var(--text); border-color: var(--accent); }
+.nav { display: flex; gap: 7px; align-items: center; }
+.header-link.primary {
+  background: linear-gradient(135deg, var(--accent), var(--accent-2));
+  color: #03201d; border-color: transparent; font-weight: 700;
+}
+.header-link.primary:hover { filter: brightness(1.06); color: #03201d; }
+
+/* Banderas */
+.flag { font-size: 1.05em; line-height: 1; margin-right: 6px; display: inline-block; }
+.match .teams .t { display: flex; align-items: center; }
+
+/* Tablas de grupo (página partidos) */
+.gtable { width: 100%; border-collapse: collapse; font-size: 13px; }
+.gtable th, .gtable td { padding: 8px 6px; text-align: center; }
+.gtable th { font-size: 10px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--muted); font-weight: 600; }
+.gtable td.team-cell, .gtable th.team-cell { text-align: left; white-space: nowrap; }
+.gtable tbody tr { border-top: 1px solid var(--border); }
+.gtable tbody tr.qual { background: rgba(52, 211, 153, 0.07); }
+.gtable .pos { color: var(--muted); width: 18px; }
+.gtable td.pts-cell { font-weight: 800; }
+.tabs { display: flex; gap: 8px; margin: 4px 0 18px; flex-wrap: wrap; }
+.legend { display: flex; gap: 14px; flex-wrap: wrap; color: var(--muted); font-size: 12px; margin-top: 10px; }
+.legend .dot { display: inline-block; width: 10px; height: 10px; border-radius: 3px; margin-right: 5px; vertical-align: middle; }
+.pill {
+  display: inline-flex; align-items: center; gap: 6px; font-size: 12px; color: var(--muted);
+  background: var(--card-2); border: 1px solid var(--border); border-radius: 999px; padding: 4px 10px;
+}
+.pendiente { color: var(--muted); font-style: italic; font-size: 12px; }
 
 /* Hero / titles */
 .page-title { font-size: 26px; margin: 26px 0 4px; }

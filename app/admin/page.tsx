@@ -97,24 +97,14 @@ export default async function AdminPage({
           </div>
         </div>
 
-        {/* Clasificados a dieciseisavos */}
-        <div className="section">
-          <h3>Clasificados a Dieciseisavos <span className="tag">marca los 32 equipos</span></h3>
-          <div className="card" style={{ padding: 14 }}>
-            <div className="checkgrid">
-              {ALL_TEAMS.map((t) => (
-                <label key={t}>
-                  <input type="checkbox" name="r32" value={t} defaultChecked={results.r32teams.includes(t)} />
-                  {t}
-                </label>
-              ))}
-            </div>
-          </div>
-        </div>
-
         {/* Llaves de eliminación */}
         <div className="section">
           <h3>Llaves de eliminación <span className="tag">equipos y marcador real de cada cruce</span></h3>
+          <div className="note" style={{ margin: "0 0 10px" }}>
+            ✨ Los clasificados a <strong>Dieciseisavos</strong> (1.º, 2.º y mejores terceros) y los que
+            avanzan en cada fase se calculan <strong>automáticamente</strong> con los marcadores. Solo
+            carga los resultados de cada cruce.
+          </div>
           <div className="card" style={{ padding: "4px 14px 12px" }}>
             {KO_SLOTS.map(({ phase, n }) => (
               <div key={phase}>

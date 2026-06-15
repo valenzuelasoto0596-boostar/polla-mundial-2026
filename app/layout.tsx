@@ -19,7 +19,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               <div className="sub">USA · México · Canadá</div>
             </div>
             <div className="header-spacer" />
-            <Link href="/admin" className="header-link">Resultados</Link>
+            <nav className="nav">
+              <Link href="/" className="header-link">Tabla</Link>
+              <Link href="/partidos" className="header-link">Partidos</Link>
+              <Link href="/admin" className="header-link primary">+ Resultados</Link>
+            </nav>
           </div>
         </header>
         <main className="container">{children}</main>

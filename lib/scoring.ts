@@ -5,6 +5,7 @@ import type {
   ActualKoMatch,
 } from "./types";
 import { fixtures, GROUP_LETTERS, PHASE_LABELS } from "./data";
+import { computeQualifiers } from "./qualifiers";
 
 // ---- Reglas de puntuación ----
 export const POINTS = {
@@ -58,9 +59,10 @@ function loserOf(m: ActualKoMatch): string | null {
   return m.hg > m.ag ? m.away : m.home;
 }
 
-// Equipos que avanzaron a cada fase (derivados de los resultados reales)
+// Equipos que avanzaron a cada fase (derivados AUTOMÁTICAMENTE de los resultados)
 export function actualAdvanced(results: Results): Record<string, string[]> {
-  const r32 = results.r32teams ?? [];
+  // R32: 1.º y 2.º de cada grupo + mejores terceros, calculado desde los grupos.
+  const r32 = computeQualifiers(results).all;
   const r16 = (results.ko.r32 ?? []).map(winnerOf).filter(Boolean) as string[];
   const qf = (results.ko.r16 ?? []).map(winnerOf).filter(Boolean) as string[];
   const sf = (results.ko.qf ?? []).map(winnerOf).filter(Boolean) as string[];
