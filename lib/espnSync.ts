@@ -12,10 +12,13 @@ function norm(s: string): string {
 function pairKey(a: string, b: string): string {
   return [norm(a), norm(b)].sort().join("|");
 }
-const GROUP_PAIR_TO_ID: Record<string, string> = (() => {
-  const out: Record<string, string> = {};
+// pairKey -> { id, home } del fixture, para ORIENTAR el marcador al home del fixture
+// (la app interpreta groups[id].hg como goles del home del fixture; ESPN podría
+// listar local/visitante al revés).
+const GROUP_PAIR_TO_FIXTURE: Record<string, { id: string; home: string }> = (() => {
+  const out: Record<string, { id: string; home: string }> = {};
   for (const L of GROUP_LETTERS) {
-    for (const m of fixtures.groups[L] ?? []) out[pairKey(m.home, m.away)] = m.id;
+    for (const m of fixtures.groups[L] ?? []) out[pairKey(m.home, m.away)] = { id: m.id, home: m.home };
   }
   return out;
 })();
@@ -109,12 +112,14 @@ export async function buildEspnPayload(
 
       const phase = phaseFromSlug(e.season?.slug ?? "");
       if (phase === "group") {
-        const id = GROUP_PAIR_TO_ID[pairKey(hName, aName)];
-        if (!id) {
+        const fx = GROUP_PAIR_TO_FIXTURE[pairKey(hName, aName)];
+        if (!fx) {
           unmapped.push(`${date}:grupo ${hName}-${aName}`);
           continue;
         }
-        body.groups![id] = { hg, ag };
+        // Orientar al home del fixture: si ESPN tiene el local invertido, voltear.
+        const sameOrient = norm(hName) === norm(fx.home);
+        body.groups![fx.id] = sameOrient ? { hg, ag } : { hg: ag, ag: hg };
       } else if (phase) {
         // penales solo si hubo empate y ESPN trae shootoutScore
         let pens: { hg: number; ag: number } | undefined;
