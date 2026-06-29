@@ -51,11 +51,20 @@ function matchPts(
 }
 
 function winnerOf(m: ActualKoMatch): string | null {
-  if (m.hg == null || m.ag == null || m.hg === m.ag) return null;
+  if (m.hg == null || m.ag == null) return null;
+  if (m.hg === m.ag) {
+    // Empate en los 90'+prórroga: se define por penales si los hay.
+    if (m.pens && m.pens.hg !== m.pens.ag) return m.pens.hg > m.pens.ag ? m.home : m.away;
+    return null;
+  }
   return m.hg > m.ag ? m.home : m.away;
 }
 function loserOf(m: ActualKoMatch): string | null {
-  if (m.hg == null || m.ag == null || m.hg === m.ag) return null;
+  if (m.hg == null || m.ag == null) return null;
+  if (m.hg === m.ag) {
+    if (m.pens && m.pens.hg !== m.pens.ag) return m.pens.hg > m.pens.ag ? m.away : m.home;
+    return null;
+  }
   return m.hg > m.ag ? m.away : m.home;
 }
 

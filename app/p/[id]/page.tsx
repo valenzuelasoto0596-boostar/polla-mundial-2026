@@ -178,7 +178,14 @@ export default async function ParticipantPage({
                         <span className="t" style={{ color: "var(--muted)" }}><span className="flag">{flag(m.away)}</span>{m.away}</span>
                       </div>
                       <div />
-                      <div className="score actual">{m.hg ?? "·"}–{m.ag ?? "·"}</div>
+                      <div className="score actual">
+                        {m.hg ?? "·"}–{m.ag ?? "·"}
+                        {m.pens && (
+                          <span style={{ fontSize: 11, color: "var(--muted)", marginLeft: 4 }}>
+                            ({m.pens.hg}-{m.pens.ag} pen)
+                          </span>
+                        )}
+                      </div>
                       <div className={`pts ${m.hit ? "win" : "zero"}`}>{m.hit ? "✓ llave" : "—"}</div>
                     </div>
                   ))}

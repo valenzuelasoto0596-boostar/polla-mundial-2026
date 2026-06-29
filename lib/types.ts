@@ -59,6 +59,9 @@ export type ActualKoMatch = {
   away: string;
   hg: number | null;
   ag: number | null;
+  // Tanda de penales (solo si el cruce terminó empatado y se definió por penales).
+  // Sirve para derivar quién avanza; el marcador de los 90'+prórroga sigue en hg/ag.
+  pens?: { hg: number; ag: number } | null;
 };
 
 export type Results = {

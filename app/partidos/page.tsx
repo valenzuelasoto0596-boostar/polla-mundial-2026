@@ -143,6 +143,11 @@ export default async function PartidosPage() {
                       </div>
                       <div className="score actual" style={{ minWidth: 56 }}>
                         {m.hg ?? "·"}–{m.ag ?? "·"}
+                        {m.pens && (
+                          <span style={{ fontSize: 11, color: "var(--muted)", marginLeft: 4 }}>
+                            ({m.pens.hg}-{m.pens.ag} pen)
+                          </span>
+                        )}
                       </div>
                     </div>
                   ))}
