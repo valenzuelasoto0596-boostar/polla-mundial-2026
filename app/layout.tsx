@@ -23,13 +23,14 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               <Link href="/" className="header-link">Tabla</Link>
               <Link href="/historial" className="header-link">Historial</Link>
               <Link href="/partidos" className="header-link">Partidos</Link>
+              <Link href="/reglas" className="header-link">Reglas</Link>
               <Link href="/admin" className="header-link primary">+ Resultados</Link>
             </nav>
           </div>
         </header>
         <main className="container">{children}</main>
         <footer className="footer container">
-          Polla Mundial 2026 · Resultado exacto 3 pts · Ganador 1 pt
+          Polla Mundial 2026 · Exacto 3 · Ganador 1 · <Link href="/reglas" className="header-link">ver todas las reglas</Link>
         </footer>
       </body>
     </html>

@@ -343,6 +343,14 @@ input:focus, select:focus { outline: none; border-color: var(--accent); }
 
 .footer { text-align: center; color: var(--muted); font-size: 12px; margin-top: 40px; }
 
+.rules-list { margin: 10px 0 0; padding-left: 0; list-style: none; display: flex; flex-direction: column; gap: 8px; }
+.rules-list li { line-height: 1.5; }
+ol.rules-list { counter-reset: r; }
+ol.rules-list li { counter-increment: r; }
+ol.rules-list li::before { content: counter(r) ". "; color: var(--muted); font-weight: 700; }
+.section .card p { margin: 0 0 8px; line-height: 1.55; }
+.section .card p:last-child { margin-bottom: 0; }
+
 @media (max-width: 620px) {
   .stat-grid { grid-template-columns: repeat(2, 1fr); }
   .profile { flex-wrap: wrap; }
