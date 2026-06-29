@@ -27,6 +27,17 @@ export default async function PartidosPage() {
       <h2 className="page-title">Partidos y grupos</h2>
       <p className="page-sub">
         {totalPlayed} partido(s) de grupos cargado(s). Tablas y clasificados calculados en vivo.
+        {results.updatedAt && (
+          <>
+            {" · "}
+            <span title="Última vez que se cargó un marcador">
+              actualizado {new Date(results.updatedAt).toLocaleString("es-CO", {
+                day: "2-digit", month: "short", hour: "2-digit", minute: "2-digit",
+                timeZone: "America/Bogota",
+              })}
+            </span>
+          </>
+        )}
       </p>
 
       {/* Clasificados a dieciseisavos (automático) */}
@@ -116,7 +127,7 @@ export default async function PartidosPage() {
       {/* Eliminatorias cargadas */}
       {KO_ORDER.some((ph) => (results.ko[ph] ?? []).length > 0) && (
         <div className="section">
-          <h3>Eliminatorias</h3>
+          <h3>Cruces reales <span className="tag">bracket y marcadores reales</span></h3>
           <div className="card">
             {KO_ORDER.map((ph) => {
               const ms = results.ko[ph] ?? [];

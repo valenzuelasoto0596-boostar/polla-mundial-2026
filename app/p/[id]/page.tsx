@@ -12,6 +12,19 @@ function initials(name: string) {
   return name.split(/\s+/).slice(0, 2).map((w) => w[0]).join("").toUpperCase();
 }
 
+function norm(s: string | null | undefined): string {
+  if (!s) return "";
+  return s
+    .normalize("NFKD")
+    .replace(/[̀-ͯ]/g, "")
+    .toLowerCase()
+    .replace(/\s+/g, " ")
+    .trim();
+}
+function pairKey(a: string | null, b: string | null): string {
+  return [norm(a), norm(b)].sort().join("|");
+}
+
 function Sc({ v }: { v: [number | null, number | null] | null }) {
   if (!v || (v[0] == null && v[1] == null)) return <div className="score muted">—</div>;
   return <div className="score">{v[0] ?? "·"}–{v[1] ?? "·"}</div>;
@@ -33,11 +46,25 @@ export default async function ParticipantPage({
   const standings = computeStandings(participants, results);
   const rank = standings.findIndex((s) => s.id === id) + 1;
 
+  // Pares de equipos que el participante predijo en cada fase (para marcar aciertos de llave)
+  const predPairs: Record<string, Set<string>> = {};
+  for (const ph of KO_ORDER) {
+    predPairs[ph] = new Set(
+      (p.knockout[ph] ?? [])
+        .filter((m) => m.home || m.away)
+        .map((m) => pairKey(m.home, m.away))
+    );
+  }
+
   const koByPhase = KO_ORDER.map((ph) => ({
     phase: ph,
     label: PHASE_LABELS[ph],
     rows: b.ko.filter((r) => r.phase === ph),
-  })).filter((g) => g.rows.length > 0);
+    real: (results.ko[ph] ?? []).map((m) => ({
+      ...m,
+      hit: predPairs[ph].has(pairKey(m.home, m.away)),
+    })),
+  })).filter((g) => g.rows.length > 0 || g.real.length > 0);
 
   return (
     <>
@@ -104,9 +131,23 @@ export default async function ParticipantPage({
       <div className="section">
         <h3>Eliminatorias <span className="tag">marcador solo si aciertas la llave</span></h3>
         <div className="card">
+          {koByPhase.length === 0 && (
+            <div className="note" style={{ padding: 14 }}>Aún no empiezan las eliminatorias.</div>
+          )}
           {koByPhase.map((g) => (
             <div key={g.phase}>
               <div className="subhead">{g.label}</div>
+
+              {/* Tus cruces */}
+              <div className="match">
+                <div style={{ fontWeight: 600, fontSize: 13 }}>Tus cruces</div>
+                <div className="col-h">Tu marc.</div>
+                <div className="col-h">Real</div>
+                <div className="col-h">Pts</div>
+              </div>
+              {g.rows.length === 0 && (
+                <div className="note" style={{ padding: "4px 14px" }}>Sin predicción en esta fase.</div>
+              )}
               {g.rows.map((m, i) => (
                 <div className="match" key={i}>
                   <div className="teams">
@@ -120,6 +161,29 @@ export default async function ParticipantPage({
                   <div className={`pts ${m.points > 0 ? "win" : "zero"}`}>{m.points > 0 ? `+${m.points}` : "0"}</div>
                 </div>
               ))}
+
+              {/* Cruces reales */}
+              {g.real.length > 0 && (
+                <>
+                  <div className="match" style={{ marginTop: 6 }}>
+                    <div style={{ fontWeight: 600, fontSize: 13 }}>Cruces reales 🌐</div>
+                    <div className="col-h" />
+                    <div className="col-h">Marc.</div>
+                    <div className="col-h" />
+                  </div>
+                  {g.real.map((m, i) => (
+                    <div className="match" key={`real-${i}`}>
+                      <div className="teams">
+                        <span className="t"><span className="flag">{flag(m.home)}</span>{m.home}</span>
+                        <span className="t" style={{ color: "var(--muted)" }}><span className="flag">{flag(m.away)}</span>{m.away}</span>
+                      </div>
+                      <div />
+                      <div className="score actual">{m.hg ?? "·"}–{m.ag ?? "·"}</div>
+                      <div className={`pts ${m.hit ? "win" : "zero"}`}>{m.hit ? "✓ llave" : "—"}</div>
+                    </div>
+                  ))}
+                </>
+              )}
             </div>
           ))}
         </div>
